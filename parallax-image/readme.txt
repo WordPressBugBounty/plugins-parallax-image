@@ -5,9 +5,9 @@ Author URI: https://www.howardehrenberg.com
 Donate link: https://www.duckdiverllc.com/parallax-image-plugin/
 Tags: Parallax, Full Screen Parallax, Parallax Window, Parallax Image
 Requires at least: 4.5
-Tested up to: 6.4
-Stable tag: 1.8
-Requires PHP: 5.4
+Tested up to: 6.7
+Stable tag: 1.9
+Requires PHP: 7.0
 License: GPLv3 
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -79,6 +79,10 @@ If you’re resizing your browser window to check for responsiveness, the plugin
 3. A Parallax Window on a bootstrap theme with fullwidth template.
 
 == Changelog ==
+
+= 1.9 =
+Update to address CVE ID: CVE-2024-9898
+
 = 1.7.1 =
 Add check of existence for offset js
 

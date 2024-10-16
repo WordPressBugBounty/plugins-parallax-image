@@ -19,11 +19,28 @@ add_action( 'wp_enqueue_scripts', 'duck_parallax_scripts' );
 function duck_parallax_scripts() {
 	wp_register_script( 'duck-parallax', plugins_url( '/js/parallax.min.js', __FILE__ ), array( 'jquery' ), '1.4.2', true );
 	wp_register_script( 'duck-px-offset', plugins_url( '/js/dd-parallax-offset.js', __FILE__ ), array( 'jquery' ), '1.0', true );
-	wp_register_style( 'duck-parallax', plugins_url( '/css/duck-parallax.css', __FILE__ ) );
+	wp_register_style( 'duck-parallax', plugins_url( '/css/duck-parallax.css', __FILE__ ), false, '1.9', 'all' );
 }
 
-// The Shortcode
-
+/**
+ * Shortcode to create a parallax scrolling effect with image background.
+ *
+ * @param array  $atts     {
+ *                         Attributes to configure the parallax effect.
+ *
+ * @type string  $img      The image URL or filename for the parallax background.
+ * @type string  $speed    The speed of the parallax scrolling (default '2').
+ * @type string  $height   The height of the parallax container.
+ * @type string  $z        -index  The z-index for layering elements (default '0').
+ * @type string  $mobile   The image URL or filename for the mobile version.
+ * @type string  $position The background position (default 'left').
+ * @type bool    $offset   Whether to include offset script (default false).
+ * @type string  $text     -pos The vertical text alignment (default 'top').
+ *
+ * @param string $content  Optional content to display within the parallax container.
+ *
+ * @return string|false HTML output for the parallax effect or false on failure.
+ */
 function duck_parallax_shortcode( $atts, $content = null ) {
 
 	$atts = shortcode_atts(
@@ -40,19 +57,17 @@ function duck_parallax_shortcode( $atts, $content = null ) {
 		$atts,
 		'duck-parallax'
 	);
-
 	/* Enqueue only for shortcode */
 	wp_enqueue_script( 'duck-parallax' );
 	wp_enqueue_style( 'duck-parallax' );
 
-	if ( ( null !== $atts['offset'] ) && ( 'true' === $atts['offset'] ) ) {
+	if ( ( 'true' === $atts['offset'] ) ) {
 		wp_enqueue_script( 'duck-px-offset' );
 	}
 
 	if ( ! $atts['img'] ) {
 		return false;
 	}
-
 	// Detect Mobile.
 	$detect = new Mobile_Detect();
 
@@ -85,7 +100,7 @@ function duck_parallax_shortcode( $atts, $content = null ) {
 	} else {
 		$speed = 1;
 	}
-	$zindex = $atts['z-index'];
+	$zindex = absint( $atts['z-index'] );
 	wp_reset_postdata();
 	if ( $detect->isMobile() ) {
 
@@ -100,13 +115,11 @@ function duck_parallax_shortcode( $atts, $content = null ) {
 				}
 			}
 		}
-
 		list($width, $height) = getimagesize( $image_path );
-		$factor               = $height / $width;
+		$factor               = floatval( $height ) / floatval( $width );
 		$div_id               = preg_replace( '/\\.[^.\\s]{3,4}$/', '', $atts['img'] );
 
-		$text_pos = strtolower( $atts['text-pos'] );
-
+		$text_pos = strtolower( sanitize_text_field( $atts['text-pos'] ) );
 		switch ( $text_pos ) {
 			case 'top':
 				$align = 'top: 0;';
@@ -127,7 +140,7 @@ function duck_parallax_shortcode( $atts, $content = null ) {
 		$output     .= '</div></div>';
 	} else {
 
-		$text_pos = strtolower( $atts['text-pos'] );
+		$text_pos = strtolower( sanitize_text_field( $atts['text-pos'] ) );
 		switch ( $text_pos ) {
 			case 'top':
 				$align = 'flex-start;';
@@ -143,7 +156,7 @@ function duck_parallax_shortcode( $atts, $content = null ) {
 			$output .= '<div class="parallax-window" data-z-index="' . esc_attr( $zindex ) . '" data-position-x="' . $atts['position'] . '" data-parallax="scroll" data-speed="' . esc_attr( $speed ) . '" data-image-src="' . esc_url( $image_url ) . '"';
 			$output .= ' style="align-items: ' . esc_attr( $align );
 		if ( '' !== $atts['height'] ) {
-			$output .= 'min-height: ' . $atts['height'] . 'px;';
+			$output .= 'min-height: ' . absint( $atts['height'] ) . 'px;';
 		}
 			$output .= '">';
 
