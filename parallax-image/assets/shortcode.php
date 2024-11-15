@@ -152,8 +152,9 @@ function duck_parallax_shortcode( $atts, $content = null ) {
 				$align = 'center';
 				break;
 		}
+		$position = strtolower( sanitize_text_field( wp_unslash( $atts['position'] ) ) );
 			$output  = '<section class="parallax-section">';
-			$output .= '<div class="parallax-window" data-z-index="' . esc_attr( $zindex ) . '" data-position-x="' . $atts['position'] . '" data-parallax="scroll" data-speed="' . esc_attr( $speed ) . '" data-image-src="' . esc_url( $image_url ) . '"';
+			$output .= '<div class="parallax-window" data-z-index="' . esc_attr( $zindex ) . '" data-position-x="' . esc_attr( $position ) . '" data-parallax="scroll" data-speed="' . esc_attr( $speed ) . '" data-image-src="' . esc_url( $image_url ) . '"';
 			$output .= ' style="align-items: ' . esc_attr( $align );
 		if ( '' !== $atts['height'] ) {
 			$output .= 'min-height: ' . absint( $atts['height'] ) . 'px;';

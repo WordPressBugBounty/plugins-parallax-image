@@ -6,7 +6,7 @@ Donate link: https://www.duckdiverllc.com/parallax-image-plugin/
 Tags: Parallax, Full Screen Parallax, Parallax Window, Parallax Image
 Requires at least: 4.5
 Tested up to: 6.7
-Stable tag: 1.9
+Stable tag: 1.9.1
 Requires PHP: 7.0
 License: GPLv3 
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -79,6 +79,9 @@ If you’re resizing your browser window to check for responsiveness, the plugin
 3. A Parallax Window on a bootstrap theme with fullwidth template.
 
 == Changelog ==
+
+= 1.9.1 =
+Update to address CVE ID: CVE-2024-11224
 
 = 1.9 =
 Update to address CVE ID: CVE-2024-9898
